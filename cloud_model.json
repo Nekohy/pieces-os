@@ -1,0 +1,975 @@
+{
+    "iterable": [
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "031da359-0208-426f-97b2-5a701fd5562f",
+            "version": "t11-v09-i01",
+            "created": {
+                "value": "2024-05-22T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "Phi-3-mini-4k-instruct",
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "PHI_3_MINI",
+            "loaded": false,
+            "unique": "Phi-3-mini-4k-instruct.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "06bb0f96-6fbf-4668-ab5e-7b8ec17e5298",
+            "version": "t16-v01-i01",
+            "created": {
+                "value": "2023-09-15T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "(PaLM2) Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CHAT_BISON",
+            "loaded": false,
+            "unique": "chat-bison",
+            "provider": "GOOGLE",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 9000,
+                "input": 8000,
+                "output": 1000
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "0f1828ec-143f-4407-81b2-3bec18f8e5e7",
+            "version": "t31-v01-i01",
+            "created": {
+                "value": "2024-07-17T16:00:00.000Z",
+                "readable": "3 months ago"
+            },
+            "name": "GPT-4o Mini Chat Model",
+            "cloud": true,
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GPT_4",
+            "loaded": false,
+            "unique": "gpt-4o-mini",
+            "provider": "OPENAI",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 80384,
+                "input": 64000,
+                "output": 16384
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "12b21e42-65fc-4e86-939e-f25e8cdc9d53",
+            "version": "t09-v01-i01",
+            "created": {
+                "value": "2023-05-22T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Extractive Tags Model",
+            "type": "BALANCED",
+            "usage": "CODE_EXTRACTIVE_TAGS",
+            "foundation": "T5",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "135883b4-a624-49bc-a179-e59a5eac66a8",
+            "version": "t06-v03-i01",
+            "created": {
+                "value": "2023-05-31T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Neural Code Search Model",
+            "type": "BALANCED",
+            "usage": "TLP_NEURAL_CODE_SEARCH",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "187c5a80-8cf4-4e4a-85b3-7d297f1c792c",
+            "version": "t01-v04-i00",
+            "created": {
+                "value": "2022-01-11T16:00:00.000Z",
+                "readable": "3 years ago"
+            },
+            "name": "Code Classification Model - 43 languages",
+            "type": "BALANCED",
+            "usage": "CODE_CLASSIFICATION",
+            "foundation": "T5",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "187dacfd-1fcd-4779-94a0-382f4c0e2812",
+            "version": "t25-v01-i01",
+            "created": {
+                "value": "2024-05-27T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "Gemini-1.5 Pro Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GEMINI_1.5",
+            "loaded": false,
+            "unique": "gemini-1.5-pro",
+            "provider": "GOOGLE",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 128000,
+                "input": 119808,
+                "output": 8192
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "1abb21be-3d6a-4723-84d6-81de6f171a98",
+            "version": "t24-v01-i01",
+            "created": {
+                "value": "2024-05-14T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "GPT-4o Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GPT_4",
+            "loaded": false,
+            "unique": "gpt-4o",
+            "provider": "OPENAI",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 68096,
+                "input": 64000,
+                "output": 4096
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "1bd2525e-5ba4-41cd-b4ba-255d2faac66e",
+            "version": "t15-v01-i01",
+            "created": {
+                "value": "2023-09-15T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Codey (PaLM2) Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CODECHAT_BISON",
+            "loaded": false,
+            "unique": "codechat-bison",
+            "provider": "GOOGLE",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 7000,
+                "input": 6000,
+                "output": 1000
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "253ef645-535f-4980-875c-70ce8c88ce0d",
+            "version": "t03-v05-i03",
+            "created": {
+                "value": "2023-05-14T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "OCR Model",
+            "type": "BALANCED",
+            "usage": "OCR",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "257c8c88-e81c-427f-8e6f-f3026b363dcf",
+            "version": "t28-v01-i01",
+            "created": {
+                "value": "2024-02-28T16:00:00.000Z",
+                "readable": "8 months ago"
+            },
+            "name": "Claude 3 Sonnet Chat Model",
+            "cloud": true,
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CLAUDE_3",
+            "loaded": false,
+            "unique": "claude-3-sonnet@20240229",
+            "provider": "ANTHROPIC",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 40000,
+                "input": 35000,
+                "output": 4096
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "34fd0e2b-5bd1-413d-b768-de52d9ba3b6e",
+            "version": "t02-v02-i03",
+            "created": {
+                "value": "2022-02-16T16:00:00.000Z",
+                "readable": "3 years ago"
+            },
+            "name": "Text vs. Code Model",
+            "type": "SPEED",
+            "usage": "TEXT_VS_CODE",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "3b4d25f6-12ba-42bb-bcb9-9eb98c6a893e",
+            "version": "t11-v06-i01",
+            "created": {
+                "value": "2024-01-21T16:00:00.000Z",
+                "readable": "9 months ago"
+            },
+            "name": "NeuralHermes-2.5-Mistral-7B Chat Model",
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "MISTRAL_7B",
+            "loaded": false,
+            "unique": "neuralhermes-2.5-mistral-7b.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "40930f41-1275-448d-be46-768f180e9425",
+            "version": "t21-v01-i01",
+            "created": {
+                "value": "2023-11-09T16:00:00.000Z",
+                "readable": "12 months ago"
+            },
+            "name": "FastText Text Embedding Model",
+            "type": "SPEED",
+            "usage": "TEXT_EMBEDDING",
+            "foundation": "FAST_TEXT",
+            "loaded": false,
+            "provider": "META",
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "420b7401-9c99-4109-acda-733258dc24d7",
+            "version": "t11-v04-i01",
+            "created": {
+                "value": "2023-08-30T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "CodeLlama Chat Model",
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CODE_LLAMA_2_7B",
+            "loaded": false,
+            "unique": "codellama-7b-instruct.Q4_K_M",
+            "cpu": false,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "42aa3109-d147-4b66-a265-c3dac3104ce0",
+            "version": "t11-v08-i01",
+            "created": {
+                "value": "2024-05-21T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "Llama-3 8B Instruct",
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "LLAMA_3_8B",
+            "loaded": false,
+            "unique": "llama-3-8b-instruct.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "463169d9-c8e9-4e3d-936b-54cd3f65344a",
+            "version": "t11-v12-i01",
+            "created": {
+                "value": "2024-05-23T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "gemma-1.1-7b-it",
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GEMMA_1.1_7B",
+            "loaded": false,
+            "unique": "gemma-1.1-7b-it.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "4b5abcef-e526-4dc2-b697-e5669074487e",
+            "version": "t10-v01-i01",
+            "created": {
+                "value": "2023-06-14T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Extractive Links Model",
+            "type": "BALANCED",
+            "usage": "CODE_EXTRACTIVE_LINKS",
+            "foundation": "T5",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "4dc08c68-4c4c-46b8-b047-e4e92b491b45",
+            "version": "t20-v01-i01",
+            "created": {
+                "value": "2023-11-09T16:00:00.000Z",
+                "readable": "12 months ago"
+            },
+            "name": "Jina Text Embedding Model",
+            "type": "ACCURACY",
+            "usage": "TEXT_EMBEDDING",
+            "loaded": false,
+            "provider": "JINA",
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "58df6d22-49ab-4dc2-9b41-17114429bef3",
+            "version": "t18-v01-i01",
+            "created": {
+                "value": "2023-11-09T16:00:00.000Z",
+                "readable": "12 months ago"
+            },
+            "name": "Unixcoder Code Search Model",
+            "type": "ACCURACY",
+            "usage": "CODE_SEARCH",
+            "foundation": "UNIXCODER",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "5a5ca381-2115-424a-8bb3-6e519bd2c685",
+            "version": "t04-v02-i01",
+            "created": {
+                "value": "2022-10-04T16:00:00.000Z",
+                "readable": "2 years ago"
+            },
+            "name": "Tagify Code Model",
+            "type": "BALANCED",
+            "usage": "TAGIFY_CODE",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "5b17e353-f1de-4c41-aa1d-414411a853ce",
+            "version": "t08-v01-i01",
+            "created": {
+                "value": "2023-05-22T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Suggested Search Queries Model",
+            "type": "BALANCED",
+            "usage": "CODE_SEARCH_QUERIES",
+            "foundation": "T5",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "5eeebada-ba38-461d-a3ed-a80684f96f41",
+            "version": "t22-v01-i01",
+            "created": {
+                "value": "2024-01-07T16:00:00.000Z",
+                "readable": "10 months ago"
+            },
+            "name": "(Gemini) Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GEMINI",
+            "loaded": false,
+            "unique": "gemini-pro",
+            "provider": "GOOGLE",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 32000,
+                "input": 20000,
+                "output": 8000
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "642c5822-f19d-4eb6-af53-7cea68987e37",
+            "version": "t11-v14-i01",
+            "created": {
+                "value": "2024-05-27T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "codegemma-1.1-7b-it",
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CODE_GEMMA_7B",
+            "loaded": false,
+            "unique": "codegemma-1.1-7b-it.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "66d4b152-651f-4b91-a195-2d0db32e63d7",
+            "version": "t12-v01-i01",
+            "created": {
+                "value": "2023-06-14T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Related People Model",
+            "type": "BALANCED",
+            "usage": "CODE_RELATED_PEOPLE",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "670e74c0-acbd-4daa-a356-e4565f2e0c5d",
+            "version": "t29-v01-i01",
+            "created": {
+                "value": "2024-02-28T16:00:00.000Z",
+                "readable": "8 months ago"
+            },
+            "name": "Claude 3 Opus Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CLAUDE_3",
+            "loaded": false,
+            "unique": "claude-3-opus@20240229",
+            "provider": "ANTHROPIC",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 40000,
+                "input": 35000,
+                "output": 4096
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "6cf576b1-2a97-40bd-b06d-941c41c6db1d",
+            "version": "t11-v11-i01",
+            "created": {
+                "value": "2024-05-23T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "gemma-1.1-2b-it",
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GEMMA_1.1_2B",
+            "loaded": false,
+            "unique": "gemma-1.1-2b-it.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "6fd521ff-faeb-46b2-8c3d-9d01c16845a4",
+            "version": "t23-v01-i01",
+            "created": {
+                "value": "2024-02-08T16:00:00.000Z",
+                "readable": "9 months ago"
+            },
+            "name": "GPT-4 Turbo Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GPT_4",
+            "loaded": false,
+            "unique": "gpt-4-turbo",
+            "provider": "OPENAI",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 68096,
+                "input": 64000,
+                "output": 4096
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "76f39fed-8aa8-4176-b991-e09ab7354a72",
+            "version": "t11-v07-i01",
+            "created": {
+                "value": "2024-02-12T16:00:00.000Z",
+                "readable": "8 months ago"
+            },
+            "name": "Phi-2 Chat Model",
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "PHI_2",
+            "loaded": false,
+            "unique": "dolphin-2_6-phi-2.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2048,
+                "input": 1536,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "79c76775-4c58-4f97-a1e0-f9de69041854",
+            "version": "t11-v02-i01",
+            "created": {
+                "value": "2023-08-17T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Llama-2 7B Chat Model",
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "LLAMA_2_7B",
+            "loaded": false,
+            "unique": "llama-2-7b-chat.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "898f57a2-90f9-42bb-bc3b-c3dbb4b89559",
+            "version": "t05-v01-i02",
+            "created": {
+                "value": "2023-05-13T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Code Description Model",
+            "type": "BALANCED",
+            "usage": "CODE_DESCRIPTION",
+            "foundation": "T5",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "8f9183eb-34e7-418d-828f-e2fc0e1d655d",
+            "version": "t11-v10-i01",
+            "created": {
+                "value": "2024-05-23T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "Phi-3-mini-128k-instruct",
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "PHI_3_MINI",
+            "loaded": false,
+            "unique": "Phi-3-mini-128k-instruct.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "9c296470-1094-4a73-b236-02d5a5203a25",
+            "version": "t26-v01-i01",
+            "created": {
+                "value": "2024-05-27T16:00:00.000Z",
+                "readable": "5 months ago"
+            },
+            "name": "Gemini-1.5 Flash Chat Model",
+            "cloud": true,
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GEMINI_1.5",
+            "loaded": false,
+            "unique": "gemini-1.5-flash",
+            "provider": "GOOGLE",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 128000,
+                "input": 119808,
+                "output": 8192
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "a249403b-87f2-4b75-9d99-cde24e70d9c5",
+            "version": "t11-v15-i01",
+            "created": {
+                "value": "2024-06-13T16:00:00.000Z",
+                "readable": "4 months ago"
+            },
+            "name": "granite-3b-code-instruct",
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GRANITE_3B",
+            "loaded": false,
+            "unique": "granite-3b-code-instruct.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2048,
+                "input": 1536,
+                "output": 512
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "c70725a7-f8a7-4189-8572-65e91a9fbf32",
+            "version": "t27-v01-i01",
+            "created": {
+                "value": "2024-06-19T16:00:00.000Z",
+                "readable": "4 monmodel.jsonths ago"
+            },
+            "name": "Claude 3.5 Sonnet Chat Model",
+            "cloud": true,
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CLAUDE_3.5",
+            "loaded": false,
+            "unique": "claude-3-5-sonnet@20240620",
+            "provider": "ANTHROPIC",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 40000,
+                "input": 35000,
+                "output": 4096
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "c974b66a-4f97-434b-8d05-2c20f3ea2b00",
+            "version": "t30-v01-i01",
+            "created": {
+                "value": "2024-03-26T16:00:00.000Z",
+                "readable": "7 months ago"
+            },
+            "name": "Claude 3 Haiku Chat Model",
+            "cloud": true,
+            "type": "SPEED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "CLAUDE_3",
+            "loaded": false,
+            "unique": "claude-3-haiku@20240307",
+            "provider": "ANTHROPIC",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 40000,
+                "input": 35000,
+                "output": 4096
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "cfb463c1-c82e-4f2b-b9c9-65eeecf3e8d0",
+            "version": "t19-v01-i01",
+            "created": {
+                "value": "2023-11-09T16:00:00.000Z",
+                "readable": "12 months ago"
+            },
+            "name": "VideoOCR Model",
+            "type": "BALANCED",
+            "usage": "VIDEO_OCR",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "d53cfc04-0648-4821-8f0e-fae0ef9f1a82",
+            "version": "t07-v01-i02",
+            "created": {
+                "value": "2023-05-13T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Code Titles Model",
+            "type": "BALANCED",
+            "usage": "CODE_TITLE",
+            "foundation": "T5",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "d5c4edcf-8761-4c46-bf50-1100646014c3",
+            "version": "t13-v01-i01",
+            "created": {
+                "value": "2023-09-15T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "GPT-3.5-turbo Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GPT_3.5",
+            "loaded": false,
+            "unique": "gpt-3.5-turbo",
+            "provider": "OPENAI",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 16000,
+                "input": 12000,
+                "output": 4000
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "d6dd5fb4-5d6d-411d-bb96-c0899ace97d4",
+            "version": "t14-v01-i01",
+            "created": {
+                "value": "2023-09-15T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "GPT-4 Chat Model",
+            "cloud": true,
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GPT_4",
+            "loaded": false,
+            "unique": "gpt-4",
+            "provider": "OPENAI",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 8000,
+                "input": 4100,
+                "output": 3900
+            }
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "e9c08f55-f5d1-45ef-b7fd-0aadcc96e77e",
+            "version": "t17-v01-i01",
+            "created": {
+                "value": "2022-11-07T16:00:00.000Z",
+                "readable": "about a year ago"
+            },
+            "name": "Text vs. Code Segmentation Model",
+            "type": "SPEED",
+            "usage": "TEXT_VS_CODE_SEGMENTATION",
+            "loaded": false,
+            "cpu": true,
+            "downloading": false
+        },
+        {
+            "schema": {
+                "migration": 0,
+                "semantic": "MAJOR_0_MINOR_0_PATCH_1"
+            },
+            "id": "eaace961-244a-441e-8283-5d0edac70e2b",
+            "version": "t11-v15-i01",
+            "created": {
+                "value": "2024-06-13T16:00:00.000Z",
+                "readable": "4 months ago"
+            },
+            "name": "granite-8b-code-instruct",
+            "type": "BALANCED",
+            "usage": "CODE_CONVERSATION",
+            "foundation": "GRANITE_8B",
+            "loaded": false,
+            "unique": "granite-8b-code-instruct.q4_K_M",
+            "cpu": false,
+            "downloading": false,
+            "maxTokens": {
+                "total": 2560,
+                "input": 2048,
+                "output": 512
+            }
+        }
+    ]
+}
