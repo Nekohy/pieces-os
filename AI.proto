@@ -1,0 +1,44 @@
+syntax = "proto3";  // 使用Protobuf版本3
+
+package runtime.aot.machine_learning.parents.vertex;
+
+service VertexInferenceService {
+    // 返回请求体
+    rpc Predict (requests) returns (response);
+}
+
+// Requests
+message requests {
+    string models = 1; // 模型名称
+    Args args = 2;
+}
+
+message Args {
+  reserved 1;
+  Messages messages = 2;
+  string rules = 3; // 规则 可以当成system
+}
+
+message Messages {
+  uint64 unknown = 1; // 也许只是常量1
+  string message = 2; // 消息 可以当成user
+}
+
+// Response
+message response {
+    uint64 response_code = 2; // 返回状态码，200，439等
+    Args1 args = 4;
+}
+
+message Args1{
+  Args2 args = 1; // 不知道什么意义的套一层
+}
+
+message Args2{
+  Args3 args = 2; // 不知道什么意义的套一层
+}
+
+message Args3{
+  int64 unknown = 1; // 也许一直是3
+  string response = 2; // 返回的内容
+}
