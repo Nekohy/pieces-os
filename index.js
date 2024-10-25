@@ -85,7 +85,7 @@ async function GrpcToPieces(models, message, rules) {
                 }
         };
 
-        for (retryCount = 0; retryCount <= config.MAX_RETRY_COUNT; retryCount++) {
+        for (let retryCount = 0; retryCount <= config.MAX_RETRY_COUNT; retryCount++) {
 
                 try {
                         // 使用 Promise 包装异步 gRPC 调用
@@ -189,12 +189,12 @@ async function handleCompletion(request) {
                 console.log(inputModel,messages,todo)
                 let stream = false;
                 // 解析system和user/assistant消息
-                const { rules, message:content } = messagesProcess(messages);
+                const { rules, message:content } = await messagesProcess(messages);
                 console.log(rules,content)
                 // 响应码，回复的消息
-                const { response_code, response_message } = GrpcToPieces(inputModel, content, rules, stream);
+                const { response_code, response_message } = await GrpcToPieces(inputModel, content, rules, stream);
                 // 转换为OpenAi格式
-                return ConvertOpenai(response_message,response_code,stream)
+                return await ConvertOpenai(response_message,response_code,stream)
         } catch (err) {
                 return error(500, err.message);
         }
