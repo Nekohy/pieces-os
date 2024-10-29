@@ -43,7 +43,7 @@ const logger = (res, req) => {
 };
 const config = new Config();
 const router = AutoRouter({
-	before: [withAuth],
+	before: [preflight, withAuth],
 	missing: () => error(404, '404 not found.'),
 	finally: [corsify, logger],
 });
@@ -52,38 +52,58 @@ router.get('/', () => json({ message: 'API 服务运行中~' }));
 router.get('/ping', () => json({ message: 'pong' }));
 router.post(config.API_PREFIX + '/v1/chat/completions', (req) => handleCompletion(req));
 
-
 async function GrpcToPieces(models, message, rules) {
-        // 加载proto文件
-        const packageDefinition = protoLoader.loadSync('./AI.proto', {
-                keepCase: true,
-                longs: String,
-                enums: String,
-                defaults: true,
-                oneofs: true
-        });
-        // 获取gRPC对象
-        // noinspection JSUnresolvedReference
-        const aiProto = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.vertex;
-
+        // gRPC服务器
+        const serverAddress = 'runtime-native-io-vertex-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
         // 使用系统的根证书
         const credentials = grpc.credentials.createSsl();
-
-        // 连接到gRPC服务器
-        const serverAddress = 'runtime-native-io-vertex-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
-        const client = new aiProto.VertexInferenceService(serverAddress, credentials);
-
-        // 构建请求消息
-        const request = {
-                models: models,
-                args: {
-                        messages: {
-                                unknown: 1,
-                                message: message
-                        },
-                        rules: rules
-                }
-        };
+        if (models.includes('gpt')){
+                // 加载proto文件
+                const packageDefinition = protoLoader.loadSync('./GPTInferenceService.proto', {
+                        keepCase: true,
+                        longs: String,
+                        enums: String,
+                        defaults: true,
+                        oneofs: true
+                });
+                // 构建请求消息
+                const request = {
+                        models: models,
+                        args: {
+                                messages: {
+                                        unknown: 1,
+                                        message: message
+                                },
+                                rules: rules
+                        }
+                };
+                // 获取gRPC对象
+                const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.gpt;
+                const client = new GRPCobjects.GPTInferenceService(serverAddress, credentials);
+        } else {
+                // 加载proto文件
+                const packageDefinition = protoLoader.loadSync('./VertexInferenceService.proto', {
+                        keepCase: true,
+                        longs: String,
+                        enums: String,
+                        defaults: true,
+                        oneofs: true
+                });
+                // 构建请求消息
+                const request = {
+                        models: models,
+                        args: {
+                                messages: {
+                                        unknown: 1,
+                                        message: message
+                                },
+                                rules: rules
+                        }
+                };
+                // 获取gRPC对象
+                const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.vertex;
+                const client = new GRPCobjects.VertexInferenceService(serverAddress, credentials);
+        }
 
         for (let retryCount = 0; retryCount <= config.MAX_RETRY_COUNT; retryCount++) {
 
@@ -154,7 +174,11 @@ async function ConvertOpenai(messages,response_code,stream) {
         if (stream){
                 // todo
         } else {
-                return ChatCompletionWithModel(messages, response_code);
+                return new Response(ChatCompletionWithModel(messages, response_code), {
+                        headers: {
+                                'Content-Type': stream ? 'text/event-stream' : 'application/json',
+                        },
+                });
         }
 }
 

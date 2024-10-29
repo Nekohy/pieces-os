@@ -1,0 +1,48 @@
+syntax = "proto3";  // 使用Protobuf版本3
+
+package runtime.aot.machine_learning.parents.gpt;
+
+service GPTInferenceService {
+    rpc Predict (Request) returns (Response);
+    rpc PredictWithStream (Request) returns (stream Response);
+}
+
+// Global
+message Message {
+  uint64 role = 1;  // 值 0 为 system，1 为普通,回复中只有 1
+  string message = 2;
+}
+
+// Requests
+message Request {
+  string models = 1; // 模型名称
+  repeated Message messages = 2; // 消息列表
+  double temperature = 3;  // 采样温度
+  double top_p = 4;  // 核心采样
+}
+
+// Response
+message Response {
+  uint64 response_code = 2; // 返回状态码，200，439 等,204 为终止
+  optional Body body = 4;
+}
+
+message Body{
+  string id = 1; // eg.chatcmpl-ANcM3OsoLf6AXJpO76pDoW7Ry68oc
+  string object = 2; // eg. chat.completion
+  uint64 time = 3; // UNIX时间戳
+  MessageWarpper message_warpper = 4;
+  Unknown unknown = 5;
+}
+
+message MessageWarpper {
+  int64 arg1 = 1; // 也许是常量1
+  Message message = 2; // 回应的消息 wt u need
+}
+
+message Unknown {
+  // 都不知道
+  int64 arg1 = 1;
+  int64 arg2 = 2;
+  int64 arg3 = 3;
+}

@@ -3,30 +3,30 @@ syntax = "proto3";  // 使用Protobuf版本3
 package runtime.aot.machine_learning.parents.vertex;
 
 service VertexInferenceService {
-    // 返回请求体
-    rpc Predict (requests) returns (response);
+    rpc Predict (Requests) returns (Response);
+    rpc PredictWithStream (Requests) returns (stream Response);
 }
 
 // Requests
-message requests {
+message Requests {
     string models = 1; // 模型名称
     Args args = 2;
 }
 
 message Args {
   reserved 1;
-  Messages messages = 2;
-  string rules = 3; // 规则 可以当成system
+  Messages messages = 2; // 消息,可以视作user
+  string rules = 3; // 规则,可以视作system
 }
 
 message Messages {
-  uint64 unknown = 1; // 也许只是常量1
-  string message = 2; // 消息 可以当成user
+  int64 unknown = 1; // 也许只是常量1
+  string message = 2; // 消息
 }
 
 // Response
-message response {
-    uint64 response_code = 2; // 返回状态码，200，439等
+message Response {
+    int64 response_code = 2; // 返回状态码，200，439等
     Args1 args = 4;
 }
 
