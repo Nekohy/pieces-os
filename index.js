@@ -7,15 +7,20 @@ import { createServer } from 'http';
 
 // 加载环境变量
 dotenv.config();
-
+// 初始化配置
 class Config {
         constructor() {
                 this.API_PREFIX = process.env.API_PREFIX || '/';
                 this.API_KEY = process.env.API_KEY || '';
                 this.MAX_RETRY_COUNT = process.env.MAX_RETRY_COUNT || 3;
                 this.RETRY_DELAY = process.env.RETRY_DELAY || 5000;
+                this.COMMON_GRPC = 'runtime-native-io-vertex-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
+                this.COMMON_PROTO = './VertexInferenceService.proto';
+                this.GPT_GRPC = 'runtime-native-io-gpt-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
+                this.GPT_PROTO = './GPTInferenceService.proto';
         }
 }
+const config = new Config();
 // 中间件
 // 添加运行回源
 const { preflight, corsify } = cors({
@@ -41,7 +46,6 @@ const withAuth = (request) => {
 const logger = (res, req) => {
 	console.log(req.method, res.status, req.url, Date.now() - req.start, 'ms');
 };
-const config = new Config();
 const router = AutoRouter({
 	before: [preflight, withAuth],
 	missing: () => error(404, '404 not found.'),
@@ -52,14 +56,13 @@ router.get('/', () => json({ message: 'API 服务运行中~' }));
 router.get('/ping', () => json({ message: 'pong' }));
 router.post(config.API_PREFIX + '/v1/chat/completions', (req) => handleCompletion(req));
 
-async function GrpcToPieces(models, message, rules) {
-        // gRPC服务器
-        const serverAddress = 'runtime-native-io-vertex-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
+async function GrpcToPieces(models, message, rules,stream,temperature,top_p) {
+        // 在非GPT类型的模型中，temperature和top_p是无效的
         // 使用系统的根证书
         const credentials = grpc.credentials.createSsl();
         if (models.includes('gpt')){
                 // 加载proto文件
-                const packageDefinition = protoLoader.loadSync('./GPTInferenceService.proto', {
+                const packageDefinition = protoLoader.loadSync(config.COMMON_PROTO, {
                         keepCase: true,
                         longs: String,
                         enums: String,
@@ -69,20 +72,53 @@ async function GrpcToPieces(models, message, rules) {
                 // 构建请求消息
                 const request = {
                         models: models,
-                        args: {
-                                messages: {
-                                        unknown: 1,
-                                        message: message
-                                },
-                                rules: rules
-                        }
-                };
+                        messages: [
+                                {role: 0, message: rules}, // system
+                                {role: 1, message: message} // user
+                        ],
+                        temperature:temperature || 0.1,
+                        top_p:top_p ?? 1,
+                }
                 // 获取gRPC对象
                 const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.gpt;
-                const client = new GRPCobjects.GPTInferenceService(serverAddress, credentials);
+                const client = new GRPCobjects.GPTInferenceService(config.GPT_GRPC, credentials);
+                for (let retryCount = 0; retryCount <= config.MAX_RETRY_COUNT; retryCount++) {
+                        try {
+                                // 使用 Promise 包装异步 gRPC 调用
+                                const response = await new Promise((resolve, reject) => {
+                                        client.Predict(request, (err, response) => {
+                                                if (err) {
+                                                        reject(err);
+                                                } else {
+                                                        resolve(response);
+                                                }
+                                        });
+                                });
+                                // 处理响应
+                                let response_code = response.response_code;
+                                let response_message = response.body.message_warpper.message;
+                                // 检查解构结果
+                                if (!response_code || !response_message) {
+                                        console.error('Invalid response format, retrying...');
+                                        continue; // 继续重试
+                                }
+                                console.log('Received response from server', response);
+
+                                // 如果响应成功，返回结果
+                                if (+response_code === 200) {
+                                        return { response_code, response_message };
+                                } else {
+                                        // 如果响应码不是200，继续重试
+                                        console.error('Non-success response code, retrying...');
+                                }
+                        } catch (err) {
+                                // 捕获错误并重试
+                                console.error('Error occurred during gRPC call:', err);
+                        }
+                }
         } else {
                 // 加载proto文件
-                const packageDefinition = protoLoader.loadSync('./VertexInferenceService.proto', {
+                const packageDefinition = protoLoader.loadSync(config.COMMON_PROTO,{
                         keepCase: true,
                         longs: String,
                         enums: String,
@@ -102,43 +138,41 @@ async function GrpcToPieces(models, message, rules) {
                 };
                 // 获取gRPC对象
                 const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.vertex;
-                const client = new GRPCobjects.VertexInferenceService(serverAddress, credentials);
-        }
-
-        for (let retryCount = 0; retryCount <= config.MAX_RETRY_COUNT; retryCount++) {
-
-                try {
-                        // 使用 Promise 包装异步 gRPC 调用
-                        const response = await new Promise((resolve, reject) => {
-                                client.Predict(request, (err, response) => {
-                                        if (err) {
-                                                reject(err);
-                                        } else {
-                                                resolve(response);
-                                        }
+                const client = new GRPCobjects.VertexInferenceService(config.COMMON_GRPC, credentials);
+                for (let retryCount = 0; retryCount <= config.MAX_RETRY_COUNT; retryCount++) {
+                        try {
+                                // 使用 Promise 包装异步 gRPC 调用
+                                const response = await new Promise((resolve, reject) => {
+                                        client.Predict(request, (err, response) => {
+                                                if (err) {
+                                                        reject(err);
+                                                } else {
+                                                        resolve(response);
+                                                }
+                                        });
                                 });
-                        });
 
-                        // 处理响应
-                        let response_code = response.response_code;
-                        let response_message = response.args.args.args.response;
-                        // 检查解构结果
-                        if (!response_code || !response_message) {
-                                console.error('Invalid response format, retrying...');
-                                continue; // 继续重试
-                        }
-                        console.log('Received response from server', response);
+                                // 处理响应
+                                let response_code = response.response_code;
+                                let response_message = response.args.args.args.response;
+                                // 检查解构结果
+                                if (!response_code || !response_message) {
+                                        console.error('Invalid response format, retrying...');
+                                        continue; // 继续重试
+                                }
+                                console.log('Received response from server', response);
 
-                        // 如果响应成功，返回结果
-                        if (+response_code === 200) {
-                                return { response_code, response_message };
-                        } else {
-                                // 如果响应码不是200，继续重试
-                                console.error('Non-success response code, retrying...');
+                                // 如果响应成功，返回结果
+                                if (+response_code === 200) {
+                                        return { response_code, response_message };
+                                } else {
+                                        // 如果响应码不是200，继续重试
+                                        console.error('Non-success response code, retrying...');
+                                }
+                        } catch (err) {
+                                // 捕获错误并重试
+                                console.error('Error occurred during gRPC call:', err);
                         }
-                } catch (err) {
-                        // 捕获错误并重试
-                        console.error('Error occurred during gRPC call:', err);
                 }
         }
 }
@@ -174,9 +208,9 @@ async function ConvertOpenai(messages,response_code,stream) {
         if (stream){
                 // todo
         } else {
-                return new Response(ChatCompletionWithModel(messages, response_code), {
+                return new Response(JSON.stringify(ChatCompletionWithModel(messages, response_code)), {
                         headers: {
-                                'Content-Type': stream ? 'text/event-stream' : 'application/json',
+                                'Content-Type': 'application/json',
                         },
                 });
         }
@@ -209,14 +243,14 @@ async function handleCompletion(request) {
         try {
                 // todo stream逆向接口
                 // 解析openai格式API请求
-                const { model: inputModel, messages, stream:todo} = await request.json();
+                const { model: inputModel, messages, stream:todo,temperature,top_p} = await request.json();
                 console.log(inputModel,messages,todo)
                 let stream = false;
                 // 解析system和user/assistant消息
                 const { rules, message:content } = await messagesProcess(messages);
                 console.log(rules,content)
                 // 响应码，回复的消息
-                const { response_code, response_message } = await GrpcToPieces(inputModel, content, rules, stream);
+                const { response_code, response_message } = await GrpcToPieces(inputModel, content, rules, stream, temperature, top_p);
                 // 转换为OpenAi格式
                 return await ConvertOpenai(response_message,response_code,stream)
         } catch (err) {
