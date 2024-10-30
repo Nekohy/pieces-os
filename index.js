@@ -62,7 +62,7 @@ async function GrpcToPieces(models, message, rules,stream,temperature,top_p) {
         const credentials = grpc.credentials.createSsl();
         if (models.includes('gpt')){
                 // 加载proto文件
-                const packageDefinition = protoLoader.loadSync(config.COMMON_PROTO, {
+                const packageDefinition = protoLoader.loadSync(config.GPT_PROTO, {
                         keepCase: true,
                         longs: String,
                         enums: String,
@@ -154,7 +154,7 @@ async function GrpcToPieces(models, message, rules,stream,temperature,top_p) {
 
                                 // 处理响应
                                 let response_code = response.response_code;
-                                let response_message = response.args.args.args.response;
+                                let response_message = response.args.args.args.message;
                                 // 检查解构结果
                                 if (!response_code || !response_message) {
                                         console.error('Invalid response format, retrying...');
