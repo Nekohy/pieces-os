@@ -18,6 +18,7 @@ class Config {
                 this.COMMON_PROTO = './VertexInferenceService.proto';
                 this.GPT_GRPC = 'runtime-native-io-gpt-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
                 this.GPT_PROTO = './GPTInferenceService.proto';
+                this.PORT = process.env.PORT || 8787;
         }
 }
 const config = new Config();
@@ -263,7 +264,7 @@ async function handleCompletion(request) {
 	if (typeof addEventListener === 'function') return;
 	// For Nodejs
 	const ittyServer = createServerAdapter(router.fetch);
-	console.log(`Listening on http://localhost:${process.env.PORT || 8787}`);
+	console.log(`Listening on http://localhost:${config.PORT}`);
 	const httpServer = createServer(ittyServer);
-	httpServer.listen(8787);
+	httpServer.listen(config.PORT);
 })();
