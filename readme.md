@@ -1,7 +1,10 @@
 # 项目简介
+![img](https://raw.githubusercontent.com/pieces-app/pieces-os-client-sdk-for-csharp/main/assets/pieces-logo.png)
 逆向Piece-OS GRPC流并转换为标准OpenAI接口的项目
+
 所有模型均由 Piece-OS 提供
-如果帮助到了你，能否给一个Star呢？
+
+如果帮助到了你，能否给一个Star呢？ 
 # todo
 - [x] 流式实现
 - [x] Serverless部署
