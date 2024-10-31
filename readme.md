@@ -10,8 +10,8 @@
 如果帮助到了你，能否给一个Star呢？ 
 # todo
 - [x] 流式实现
-- [x] Serverless部署
-- [x] 静态Proto JS
+- [ ] Serverless部署
+- [ ] 静态Proto JS
 
 # 项目结构
 ```
