@@ -94,7 +94,12 @@ async function GrpcToPieces(models, message, rules, stream, temperature, top_p) 
                                 const call = client.PredictWithStream(request);
                                 return ConvertOpenai(call, models, stream)
                         } else {
-                                const call = client.Predict(request);
+                                const call = await new Promise((resolve, reject) => {
+                                        client.Predict(request, (err, response) => {
+                                                if (err) reject(err);
+                                                else resolve(response);
+                                        });
+                                });
                                 return ConvertOpenai(call, models, stream)
                         }
                         // 处理响应
@@ -124,7 +129,12 @@ async function GrpcToPieces(models, message, rules, stream, temperature, top_p) 
                                 const call = client.PredictWithStream(request);
                                 return ConvertOpenai(call, models, stream)
                         } else {
-                                const call = client.Predict(request);
+                                const call = await new Promise((resolve, reject) => {
+                                        client.Predict(request, (err, response) => {
+                                                if (err) reject(err);
+                                                else resolve(response);
+                                        });
+                                });
                                 return ConvertOpenai(call, models, stream)
                         }
                         // 处理响应
@@ -192,9 +202,14 @@ async function ConvertOpenai(call,model,stream) {
                         },
                 })
         } else {
-                let response_code = Number(response.response_code);
+                let response_code = Number(call.response_code);
                 if (response_code === 200) {
-                        let response_message = response.body.message_warpper.message.message;
+                        let response_message
+                        if (model.includes('gpt')) {
+                                response_message = call.body.message_warpper.message.message;
+                        } else {
+                                response_message = call.args.args.args.message;
+                        }
                         return new Response(JSON.stringify(ChatCompletionWithModel(response_message, model)), {
                                         headers: {
                                                 'Content-Type': 'application/json',
