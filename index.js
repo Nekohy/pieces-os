@@ -73,11 +73,12 @@ async function GrpcToPieces(models, message, rules, stream, temperature, top_p) 
         // 在非GPT类型的模型中，temperature和top_p是无效的
         // 使用系统的根证书
         const credentials = grpc.credentials.createSsl();
+        let client,request;
         if (models.includes('gpt')){
                 // 加载proto文件
                 const packageDefinition = new GRPCHandler(config.GPT_PROTO).packageDefinition;
                 // 构建请求消息
-                const request = {
+                request = {
                         models: models,
                         messages: [
                                 {role: 0, message: rules}, // system
@@ -88,30 +89,12 @@ async function GrpcToPieces(models, message, rules, stream, temperature, top_p) 
                 }
                 // 获取gRPC对象
                 const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.gpt;
-                const client = new GRPCobjects.GPTInferenceService(config.GPT_GRPC, credentials);
-                try {
-                        if (stream){
-                                const call = client.PredictWithStream(request);
-                                return ConvertOpenai(call, models, stream)
-                        } else {
-                                const call = await new Promise((resolve, reject) => {
-                                        client.Predict(request, (err, response) => {
-                                                if (err) reject(err);
-                                                else resolve(response);
-                                        });
-                                });
-                                return ConvertOpenai(call, models, stream)
-                        }
-                        // 处理响应
-                } catch (err) {
-                        // 捕获错误并重试
-                        console.error('Error occurred during gRPC call:', err);
-                }
+                client = new GRPCobjects.GPTInferenceService(config.GPT_GRPC, credentials);
         } else {
                 // 加载proto文件
                 const packageDefinition = new GRPCHandler(config.COMMON_PROTO).packageDefinition;
                 // 构建请求消息
-                const request = {
+                request = {
                         models: models,
                         args: {
                                 messages: {
@@ -123,26 +106,9 @@ async function GrpcToPieces(models, message, rules, stream, temperature, top_p) 
                 };
                 // 获取gRPC对象
                 const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.vertex;
-                const client = new GRPCobjects.VertexInferenceService(config.COMMON_GRPC, credentials);
-                try {
-                        if (stream){
-                                const call = client.PredictWithStream(request);
-                                return ConvertOpenai(call, models, stream)
-                        } else {
-                                const call = await new Promise((resolve, reject) => {
-                                        client.Predict(request, (err, response) => {
-                                                if (err) reject(err);
-                                                else resolve(response);
-                                        });
-                                });
-                                return ConvertOpenai(call, models, stream)
-                        }
-                        // 处理响应
-                } catch (err) {
-                        // 捕获错误并重试
-                        console.error('Error occurred during gRPC call:', err);
-                }
+                client = new GRPCobjects.VertexInferenceService(config.COMMON_GRPC, credentials);
         }
+        return await ConvertOpenai(client,request,models,stream);
 }
 
 async function messagesProcess(messages) {
@@ -169,55 +135,70 @@ async function messagesProcess(messages) {
         return { rules, message };
 }
 
-async function ConvertOpenai(call,model,stream) {
-        if (stream){
-                const encoder = new TextEncoder();
-                const ReturnStream = new ReadableStream({
-                    start(controller) {
-                            call.on('data', (response) => {
-                                    let response_code = Number(response.response_code);
-                                    if (response_code === 204) {
-                                            // 如果 response_code 是 204，关闭流
-                                            controller.close()
-                                            call.destroy()
-                                    } else if (response_code === 200) {
-                                            let response_message
-                                            if (model.includes('gpt')) {
-                                                    response_message = response.body.message_warpper.message.message;
-                                            } else {
-                                                    response_message = response.args.args.args.message;
-                                            }
-                                            // 否则，将数据块加入流中
-                                            controller.enqueue(encoder.encode(`data: ${JSON.stringify(ChatCompletionStreamWithModel(response_message, model))}\n\n`));
-                                    } else {
-                                            controller.error(new Error(`Error: stream chunk is not success`));
-                                            controller.close()
+async function ConvertOpenai(client,request,model,stream) {
+        for (let i = 0; i < config.MAX_RETRY_COUNT; i++) {
+                try {
+                        if (stream) {
+                                const call = client.PredictWithStream(request);
+                                const encoder = new TextEncoder();
+                                const ReturnStream = new ReadableStream({
+                                    start(controller) {
+                                            call.on('data', (response) => {
+                                                    let response_code = Number(response.response_code);
+                                                    if (response_code === 204) {
+                                                            // 如果 response_code 是 204，关闭流
+                                                            controller.close()
+                                                            call.destroy()
+                                                    } else if (response_code === 200) {
+                                                            let response_message
+                                                            if (model.includes('gpt')) {
+                                                                    response_message = response.body.message_warpper.message.message;
+                                                            } else {
+                                                                    response_message = response.args.args.args.message;
+                                                            }
+                                                            // 否则，将数据块加入流中
+                                                            controller.enqueue(encoder.encode(`data: ${JSON.stringify(ChatCompletionStreamWithModel(response_message, model))}\n\n`));
+                                                    } else {
+                                                            controller.error(new Error(`Error: stream chunk is not success`));
+                                                            controller.close()
+                                                    }
+                                            })
                                     }
-                            })
-                    }
-                    });
-                return new Response(ReturnStream, {
-                        headers: {
-                                'Content-Type': 'text/event-stream',
-                        },
-                })
-        } else {
-                let response_code = Number(call.response_code);
-                if (response_code === 200) {
-                        let response_message
-                        if (model.includes('gpt')) {
-                                response_message = call.body.message_warpper.message.message;
-                        } else {
-                                response_message = call.args.args.args.message;
-                        }
-                        return new Response(JSON.stringify(ChatCompletionWithModel(response_message, model)), {
+                                    });
+                                return new Response(ReturnStream, {
                                         headers: {
-                                                'Content-Type': 'application/json',
+                                                'Content-Type': 'text/event-stream',
                                         },
+                                })
+                } else {
+                        const call = await new Promise((resolve, reject) => {
+                                client.Predict(request, (err, response) => {
+                                        if (err) reject(err);
+                                        else resolve(response);
                                 });
+                        });
+                        let response_code = Number(call.response_code);
+                        if (response_code === 200) {
+                                let response_message
+                                if (model.includes('gpt')) {
+                                        response_message = call.body.message_warpper.message.message;
+                                } else {
+                                        response_message = call.args.args.args.message;
+                                }
+                                return new Response(JSON.stringify(ChatCompletionWithModel(response_message, model)), {
+                                                headers: {
+                                                        'Content-Type': 'application/json',
+                                                },
+                                        });
+                                }
                         }
+                } catch (err) {
+                        console.error(err);
+                        await new Promise((resolve) => setTimeout(resolve, config.RETRY_DELAY));
                 }
         }
+        return error(500, err.message);
+}
 
 function ChatCompletionWithModel(message, model) {
         return {
