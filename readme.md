@@ -168,17 +168,20 @@ curl -sSL https://raw.githubusercontent.com/Nekohy/pieces-os/main/install.sh | s
 
 3. 管理容器：
 ```bash
-# 停止容器
+## 停止容器
 docker stop pieces-os
 
-# 启动容器
+## 启动容器
 docker start pieces-os
 
-# 重启容器
+## 重启容器
 docker restart pieces-os
 
-# 删除容器
+## 删除容器
 docker rm pieces-os
 ```
 
 请确保在使用服务时使用正确的 API_KEY 进行认证。
+
+# 碎碎念
+我怎么把自己的提交邮箱写错了呢（这些提交都不算在我这个号头上（QWQ
