@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
-    "run": "node index.js"
+    "start": "node api/index.js"
   },
+  "author": "Nekohy",
   "private": true,
   "dependencies": {
     "@grpc/grpc-js": "^1.12.2",
     "@grpc/proto-loader": "^0.7.13",
+    "@vercel/node": "^3.2.24",
     "@whatwg-node/server": "^0.9.50",
     "dotenv": "^16.4.5",
     "itty-router": "^5.0.18"

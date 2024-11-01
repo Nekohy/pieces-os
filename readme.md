@@ -8,9 +8,11 @@
 本项目基于GPLV3协议开源
 
 如果帮助到了你，能否给一个Star呢？ 
+# 一键部署
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nekohy/pieces-os&project-name=Pieces-OS&repository-name=Pieces-OS)
 # todo
 - [x] 流式实现
-- [ ] Serverless部署
+- [x] Serverless部署
 - [ ] 静态Proto JS
 
 # 项目结构

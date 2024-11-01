@@ -225,7 +225,7 @@ function ChatCompletionWithModel(message, model) {
 
 function ChatCompletionStreamWithModel(text, model) {
         return {
-                id: 'chatcmpl-QXlha2FBbmROaXhpZUFyZUF3ZXNvbWUK',
+                id: 'chatcmpl-Nekohy',
                 object: 'chat.completion.chunk',
                 created: 0,
                 model,
