@@ -49,34 +49,16 @@ cloud_model.json 云端模型的配置文件，请提取unique中的模型使用
 - **chat-bison**
 - **codechat-bison**
 
-# 未测试模型
-
-## Phi 系列
-- **Phi-3-mini-4k-instruct.q4_K_M**
-- **Phi-3-mini-128k-instruct.q4_K_M**
-
-## Hermes 系列
-- **neuralhermes-2.5-mistral-7b.q4_K_M**
-
-## LLaMA 系列
-- **llama-3-8b-instruct.q4_K_M**
-- **llama-2-7b-chat.q4_K_M**
-
-## Gemma 系列
-- **gemma-1.1-7b-it.q4_K_M**
-- **codegemma-1.1-7b-it.q4_K_M**
-- **gemma-1.1-2b-it.q4_K_M**
-
-## Dolphin 系列
-- **dolphin-2_6-phi-2.q4_K_M**
-
-## Granite 系列
-- **granite-3b-code-instruct.q4_K_M**
-- **granite-8b-code-instruct.q4_K_M**
-
-# 使用方法
+# 手动部署
 安装 package.json 中定义的依赖库后，执行 node index.js 启动程序
+# 测试命令
+```
+获取模型
+curl --request GET 'http://127.0.0.1:8787/v1/models' \
+  --header 'Content-Type: application/json'
+```
 ```curl
+请求
 curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
   --header 'Content-Type: application/json' \
   --data '{
