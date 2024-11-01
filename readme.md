@@ -51,6 +51,7 @@ vercel.json Vercel部署配置文件
 - **gpt-4o**
 
 ## Gemini 系列
+- **gemini-pro**
 - **gemini-1.5-flash**
 - **gemini-1.5-pro**
 
