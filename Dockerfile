@@ -1,7 +1,4 @@
-export default function Component() {
-  return (
-    <pre className="text-sm bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto">
-      {`# 使用 Node.js 18 作为基础镜像
+# 使用 Node.js 18 作为基础镜像
 FROM node:18-slim
 
 # 设置工作目录
@@ -20,7 +17,4 @@ COPY . .
 EXPOSE 8787
 
 # 运行应用
-CMD ["node", "api/index.js"]`}
-    </pre>
-  )
-}
+CMD ["node", "api/index.js"]
