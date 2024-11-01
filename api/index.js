@@ -71,6 +71,26 @@ const router = AutoRouter({
 // Router路径
 router.get('/', () => json({ message: 'API 服务运行中~' }));
 router.get('/ping', () => json({ message: 'pong' }));
+router.get(config.API_PREFIX + '/v1/models', () =>
+    json({
+            object: 'list',
+            data: [
+                    { id: "gpt-4o-mini", object: "model", owned_by: "pieces-os" },
+                    { id: "gpt-4o", object: "model", owned_by: "pieces-os" },
+                    { id: "gpt-4-turbo", object: "model", owned_by: "pieces-os" },
+                    { id: "gpt-4", object: "model", owned_by: "pieces-os" },
+                    { id: "gpt-3.5-turbo", object: "model", owned_by: "pieces-os" },
+                    { id: "claude-3-sonnet@20240229", object: "model", owned_by: "pieces-os" },
+                    { id: "claude-3-opus@20240229", object: "model", owned_by: "pieces-os" },
+                    { id: "claude-3-haiku@20240307", object: "model", owned_by: "pieces-os" },
+                    { id: "claude-3-5-sonnet@20240620", object: "model", owned_by: "pieces-os" },
+                    { id: "gemini-1.5-flash", object: "model", owned_by: "pieces-os" },
+                    { id: "gemini-1.5-pro", object: "model", owned_by: "pieces-os" },
+                    { id: "chat-bison", object: "model", owned_by: "pieces-os" },
+                    { id: "codechat-bison", object: "model", owned_by: "pieces-os" },
+            ],
+    })
+);
 router.post(config.API_PREFIX + '/v1/chat/completions', (req) => handleCompletion(req));
 
 async function GrpcToPieces(models, message, rules, stream, temperature, top_p) {
