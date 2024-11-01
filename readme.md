@@ -115,7 +115,7 @@ curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
 
 1. 下载 `docker-compose.yml` 文件：
 ```bash
-wget https://raw.githubusercontent.com/Nekohy/pieces-os/main/docker-compose.yml
+wget https://raw.githubusercontent.com/Nekohy/pieces-os/docker-compose.yml
 ```
 
 2. 修改配置：
