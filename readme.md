@@ -19,9 +19,11 @@
 
 # 项目结构
 ```
-GPTInferenceService.proto # GPT的GRPC定义
-VertexInferenceService.proto # 其余几乎所有模型的GRPC定义
-index.js Node.js的项目文件，即开即用
+api
+    protos
+        GPTInferenceService.proto # GPT的GRPC定义
+        VertexInferenceService.proto # 其余几乎所有模型的GRPC定义
+    index.js Node.js的项目文件，即开即用
 cloud_model.json 云端模型的配置文件，请提取unique中的模型使用
 ```
 # 测试可用模型
