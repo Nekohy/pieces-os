@@ -109,3 +109,74 @@ curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
 - **获取方式**: `process.env.PORT || 8787`
 
 
+## Docker 部署说明
+
+### 使用 Docker Compose（推荐）
+
+1. 下载 `docker-compose.yml` 文件：
+```bash
+wget https://raw.githubusercontent.com/Nekohy/pieces-os/main/docker-compose.yml
+```
+
+2. 修改配置：
+   - 将 `API_KEY=sk-123456` 中的值修改为您自定义的密钥，用于保护部署的项目
+   - 如需要，可以修改左侧端口号（默认8787）
+
+3. 启动服务：
+```bash
+docker-compose up -d
+```
+
+4. 停止服务：
+```bash
+docker-compose down
+```
+
+### 使用 Docker 命令
+
+如果您不想使用 Docker Compose，也可以直接使用 Docker 命令：
+
+1. 拉取镜像：
+```bash
+docker pull chb2024/pieces-os:latest
+```
+
+2. 运行容器：
+```bash
+docker run -d \
+  --name pieces-os \
+  -p 8787:8787 \
+  -e API_KEY=sk-123456 \
+  --restart unless-stopped \
+  chb2024/pieces-os:latest
+```
+
+### 一键安装脚本(docker+本项目)
+
+```bash
+
+```
+
+根据提示输入即可
+
+注意事项：
+- 可以修改 `API_KEY` 用于保护您部署的docker
+- 可以修改端口映射的左侧数值（如 `-p 9000:8787`）
+- 右侧端口（8787）和其他默认配置请勿修改
+
+3. 管理容器：
+```bash
+# 停止容器
+docker stop pieces-os
+
+# 启动容器
+docker start pieces-os
+
+# 重启容器
+docker restart pieces-os
+
+# 删除容器
+docker rm pieces-os
+```
+
+请确保在使用服务时使用正确的 API_KEY 进行认证。
