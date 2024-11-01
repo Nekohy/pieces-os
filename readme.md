@@ -10,6 +10,7 @@
 如果帮助到了你，能否给一个Star呢？ 
 # 一键部署
 [![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nekohy/pieces-os&project-name=Pieces-OS&repository-name=Pieces-OS)
+
 请注意下列环境变量！私人使用请添加API_KEY！
 # todo
 - [x] 流式实现
