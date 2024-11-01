@@ -15,9 +15,9 @@ class Config {
                 this.MAX_RETRY_COUNT = process.env.MAX_RETRY_COUNT || 3;
                 this.RETRY_DELAY = process.env.RETRY_DELAY || 5000;
                 this.COMMON_GRPC = 'runtime-native-io-vertex-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
-                this.COMMON_PROTO = './VertexInferenceService.proto';
+                this.COMMON_PROTO = './protos/VertexInferenceService.proto';
                 this.GPT_GRPC = 'runtime-native-io-gpt-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
-                this.GPT_PROTO = './GPTInferenceService.proto';
+                this.GPT_PROTO = './protos/GPTInferenceService.proto';
                 this.PORT = process.env.PORT || 8787;
         }
 }
