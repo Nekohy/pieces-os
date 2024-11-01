@@ -1,9 +1,9 @@
 # 项目简介
 ![img](https://raw.githubusercontent.com/pieces-app/pieces-os-client-sdk-for-csharp/main/assets/pieces-logo.png)
 
-逆向Piece-OS GRPC流并转换为标准OpenAI接口的项目
+逆向Pieces-OS GRPC流并转换为标准OpenAI接口的项目
 
-所有模型均由 Piece-OS 提供
+所有模型均由 Pieces-OS 提供
 
 本项目基于GPLV3协议开源
 
