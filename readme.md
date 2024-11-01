@@ -17,7 +17,7 @@
 # todo
 - [x] 流式实现
 - [x] Serverless部署
-- [ ] Docker支持
+- [x] Docker支持
 - [ ] 静态Proto JS
 
 # 项目结构
@@ -116,7 +116,7 @@ curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
 
 1. 下载 `docker-compose.yml` 文件：
 ```bash
-wget https://raw.githubusercontent.com/Nekohy/pieces-os/docker-compose.yml
+curl -sSL https://raw.githubusercontent.com/Nekohy/pieces-os/main/docker-compose.yml
 ```
 
 2. 修改配置：
@@ -155,6 +155,7 @@ docker run -d \
 ### 一键安装脚本(docker+本项目)
 
 ```bash
+curl -sSL https://raw.githubusercontent.com/Nekohy/pieces-os/main/install.sh | sudo bash
 
 ```
 
