@@ -2,11 +2,15 @@ import grpc from '@grpc/grpc-js';
 import protoLoader from '@grpc/proto-loader';
 import {AutoRouter, cors, error, json} from 'itty-router';
 import dotenv from 'dotenv';
+import path,{ dirname } from 'path';
+import { fileURLToPath } from 'url';
 import {createServerAdapter} from '@whatwg-node/server';
 import {createServer} from 'http';
 
 // 加载环境变量
 dotenv.config();
+// 获取当前文件的目录路径（ESM 方式）
+const __dirname = dirname(fileURLToPath(import.meta.url));
 // 初始化配置
 class Config {
         constructor() {
@@ -15,9 +19,9 @@ class Config {
                 this.MAX_RETRY_COUNT = process.env.MAX_RETRY_COUNT || 3;
                 this.RETRY_DELAY = process.env.RETRY_DELAY || 5000;
                 this.COMMON_GRPC = 'runtime-native-io-vertex-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
-                this.COMMON_PROTO = './protos/VertexInferenceService.proto';
+                this.COMMON_PROTO = path.join(__dirname,'..', 'protos', 'VertexInferenceService.proto')
                 this.GPT_GRPC = 'runtime-native-io-gpt-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
-                this.GPT_PROTO = './protos/GPTInferenceService.proto';
+                this.GPT_PROTO = path.join(__dirname,'..', 'protos', 'GPTInferenceService.proto')
                 this.PORT = process.env.PORT || 8787;
         }
 }
