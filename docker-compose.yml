@@ -12,7 +12,5 @@ services:
       # - API_PREFIX=/
       # - MAX_RETRY_COUNT=3
       # - RETRY_DELAY=5000
-      # - PORT=8787 #别改
-      # - COMMON_PROTO=./VertexInferenceService.proto #别改
-      # - GPT_PROTO=./GPTInferenceService.proto #别改
+      # - PORT=8787 #内部端口，请勿修改
     restart: unless-stopped
