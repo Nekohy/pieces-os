@@ -151,10 +151,11 @@ docker run -d \
   chb2024/pieces-os:latest
 ```
 
-### 一键安装脚本(docker+本项目)，适用于Ubuntu,Debian
+### 一键安装脚本(docker+本项目)，适用于Ubuntu,Debian......
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/Nekohy/pieces-os/main/install.sh | sudo bash
+
 
 ```
 
