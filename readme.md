@@ -8,7 +8,11 @@
 本项目基于GPLV3协议开源
 
 如果帮助到了你，能否给一个Star呢？ 
+# 免责声明
+本项目仅供学习交流使用，不得用于商业用途，如有侵权请联系删除
 # DEMO站
+**请善待公共服务，尽量自己搭建**
+
 [https://pieces.nekomoon.cc](https://pieces.nekomoon.cc)
 # 一键部署
 [![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nekohy/pieces-os&project-name=Pieces-OS&repository-name=Pieces-OS)
@@ -23,15 +27,17 @@
 # 项目结构
 ```
 api
-    protos
-        GPTInferenceService.proto # GPT的GRPC定义
-        VertexInferenceService.proto # 其余几乎所有模型的GRPC定义
     index.js Node.js的项目文件，即开即用
+protos
+    GPTInferenceService.proto # GPT的GRPC定义
+    VertexInferenceService.proto # 其余几乎所有模型的GRPC定义
 cloud_model.json 云端模型的配置文件，请提取unique中的模型使用
+package.json 项目依赖
+vercel.json Vercel部署配置文件
 ```
 # 测试可用模型
 
-## Claude 系列
+## Claude 系列(Nextchat可将@换为-)
 - **claude-3-5-sonnet@20240620**
 - **claude-3-haiku@20240307**
 - **claude-3-sonnet@20240229**
@@ -84,7 +90,7 @@ curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
 
 ## `API_KEY`
 - **描述**: API 请求的密钥。
-- **默认值**: 空字符串 `''`
+- **默认值**: 无 `''`
 - **获取方式**: `process.env.API_KEY || ''`
 
 ## `MAX_RETRY_COUNT`
@@ -102,11 +108,4 @@ curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
 - **默认值**: `8787`
 - **获取方式**: `process.env.PORT || 8787`
 
-## `COMMON_PROTO`
-- **描述**: 通用 gRPC 服务的 proto 文件路径。
-- **默认值**: `'./VertexInferenceService.proto'`
-
-## `GPT_PROTO`
-- **描述**: GPT 推理 gRPC 服务的 proto 文件路径。
-- **默认值**: `'./GPTInferenceService.proto'`
 

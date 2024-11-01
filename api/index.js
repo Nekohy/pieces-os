@@ -224,6 +224,16 @@ async function ConvertOpenai(client,request,model,stream) {
         return error(500, err.message);
 }
 
+function renameIfNeeded(input) {
+        // 替换的正则表达式
+        const regex = /^(claude-3-(5-sonnet|haiku|sonnet|opus))-(\d{8})$/;
+        const match = input.match(regex);
+        if (match) {
+                return `${match[1]}@${match[3]}`;
+        }
+        return input;
+}
+
 function ChatCompletionWithModel(message, model) {
         return {
                 id: 'Chat-Nekohy',
@@ -271,11 +281,12 @@ async function handleCompletion(request) {
                 // 解析openai格式API请求
                 const { model: inputModel, messages, stream,temperature,top_p} = await request.json();
                 console.log(inputModel,messages,stream)
+                const model = renameIfNeeded(inputModel);
                 // 解析system和user/assistant消息
                 const { rules, message:content } = await messagesProcess(messages);
                 console.log(rules,content)
                 // 响应码，回复的消息
-                return await GrpcToPieces(inputModel, content, rules, stream, temperature, top_p);
+                return await GrpcToPieces(model, content, rules, stream, temperature, top_p);
         } catch (err) {
                 return error(500, err.message);
         }
