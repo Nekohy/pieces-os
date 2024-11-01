@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  pieces-os:
+    image: chb2024/pieces-os:latest
+    container_name: pieces-os
+    ports:
+      - "8787:8787"  # 左边端口可以修改（如：9000:8787），右边端口不要改
+    environment:
+      - API_KEY=sk-123456  # 本项目鉴权key，用于访问本项目时鉴权
+      # 以下是默认值，您可以根据需要取消注释并修改
+      # - API_PREFIX=/
+      # - MAX_RETRY_COUNT=3
+      # - RETRY_DELAY=5000
+      # - PORT=8787 #别改
+      # - COMMON_PROTO=./VertexInferenceService.proto #别改
+      # - GPT_PROTO=./GPTInferenceService.proto #别改
+    restart: unless-stopped
