@@ -7,17 +7,16 @@ import { fileURLToPath } from 'url';
 import { createServerAdapter } from '@whatwg-node/server';
 import { createServer } from 'http';
 
-// 加载环境变量
 dotenv.config();
-// 获取当前文件的目录路径（ESM 方式）
 const __dirname = dirname(fileURLToPath(import.meta.url));
-// 初始化配置
+
+// 配置类
 class Config {
     constructor() {
         this.API_PREFIX = process.env.API_PREFIX || '/';
         this.API_KEY = process.env.API_KEY || '';
-        this.MAX_RETRY_COUNT = process.env.MAX_RETRY_COUNT || 3;
-        this.RETRY_DELAY = process.env.RETRY_DELAY || 5000;
+        this.MAX_RETRY_COUNT = parseInt(process.env.MAX_RETRY_COUNT, 10) || 3;
+        this.RETRY_DELAY = parseInt(process.env.RETRY_DELAY, 10) || 5000;
         this.COMMON_GRPC = 'runtime-native-io-vertex-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
         this.COMMON_PROTO = path.join(__dirname, '..', 'protos', 'VertexInferenceService.proto');
         this.GPT_GRPC = 'runtime-native-io-gpt-inference-grpc-service-lmuw6mcn3q-ul.a.run.app';
@@ -25,9 +24,11 @@ class Config {
         this.PORT = process.env.PORT || 8787;
     }
 }
+const config = new Config();
+
+// gRPC处理类
 class GRPCHandler {
     constructor(protoFilePath) {
-        // 动态加载传入的 .proto 文件路径
         this.packageDefinition = protoLoader.loadSync(protoFilePath, {
             keepCase: true,
             longs: String,
@@ -37,16 +38,14 @@ class GRPCHandler {
         });
     }
 }
-const config = new Config();
-// 中间件
-// 添加运行回源
+
+// CORS和认证中间件
 const { preflight, corsify } = cors({
     origin: '*',
     allowMethods: '*',
     exposeHeaders: '*',
 });
 
-// 添加认证
 const withAuth = (request) => {
     if (config.API_KEY) {
         const authHeader = request.headers.get('Authorization');
@@ -59,16 +58,20 @@ const withAuth = (request) => {
         }
     }
 };
-// 返回运行信息
+
+// 日志记录中间件
 const logger = (res, req) => {
     console.log(req.method, res.status, req.url, Date.now() - req.start, 'ms');
 };
+
+// 路由配置
 const router = AutoRouter({
     before: [preflight, withAuth],
     missing: () => error(404, '404 not found.'),
     finally: [corsify, logger],
 });
-// Router路径
+
+// API端点
 router.get('/', () => json({ message: 'API 服务运行中~' }));
 router.get('/ping', () => json({ message: 'pong' }));
 router.get(config.API_PREFIX + '/v1/models', () =>
@@ -91,134 +94,139 @@ router.get(config.API_PREFIX + '/v1/models', () =>
         ],
     })
 );
+
 router.post(config.API_PREFIX + '/v1/chat/completions', (req) => handleCompletion(req));
 
-// 调用模型转换函数
+// 模型转换函数
 function convertModel(inputModel) {
-    let model;
-    switch (inputModel.toLowerCase()) {
-        case 'claude-3-5-sonnet@20240620':
-            model = 'claude-3-5-sonnet-20240620';
-            break;
-        case 'claude-3-haiku@20240307':
-            model = 'claude-3-haiku-20240307';
-            break;
-        case 'claude-3-sonnet@20240229':
-            model = 'claude-3-sonnet-20240229';
-            break;
-        case 'claude-3-opus@20240229':
-            model = 'claude-3-opus-20240229';
-            break;
-    }
-    return model;
+    const modelMap = {
+        'claude-3-5-sonnet-20240620': 'claude-3-5-sonnet@20240620',
+        'claude-3-haiku-20240307': 'claude-3-haiku@20240307',
+        'claude-3-sonnet-20240229': 'claude-3-sonnet@20240229',
+        'claude-3-opus-20240229': 'claude-3-opus@20240229',
+        'gpt-4o-mini': 'gpt-4o-mini',
+        'gpt-4o': 'gpt-4o',
+        'gpt-4-turbo': 'gpt-4-turbo',
+        'gpt-4': 'gpt-4',
+        'gpt-3.5-turbo': 'gpt-3.5-turbo',
+        'gemini-1.5-flash': 'gemini-1.5-flash',
+        'gemini-1.5-pro': 'gemini-1.5-pro',
+        'chat-bison': 'chat-bison',
+        'codechat-bison': 'codechat-bison',
+    };
+    return modelMap[inputModel.toLowerCase()] || inputModel;
 }
 
+// 完成处理函数
 async function handleCompletion(request) {
     try {
-        const { model: inputModel, messages, stream, temperature, top_p } = await request.json();
-        console.log('Model:', inputModel, 'Messages:', messages, 'Stream:', stream);
+        const { model: inputModel, messages, stream: inputStream, temperature, top_p } = await request.json();
+        if (!inputModel) {
+            console.error("Model parameter is missing in the request");
+            return json({ error: { message: 'Model parameter is missing', type: 'invalid_request_error', param: 'model', code: 'missing_model' } }, { status: 400 });
+        }
+        const stream = inputStream !== undefined ? inputStream : false;
+        const model = convertModel(inputModel);
+        console.log("Processing request with model:", model, "\nMessages:", messages, "\nStream:", stream);
 
-        // 解析 system 和 user/assistant 消息
         const { rules, message: content } = await messagesProcess(messages);
-        console.log('Parsed Rules:', rules, 'Parsed Content:', content);
+        const response = await GrpcToPieces(model, content, rules, stream, temperature, top_p);
 
-        // 调用 GrpcToPieces 并返回响应
-        const response = await GrpcToPieces(inputModel, content, rules, stream, temperature, top_p);
-        return response;
+        if (stream) {
+            return response;
+        } else {
+            try {
+                const jsonResponse = await response.json();
+                if (jsonResponse && jsonResponse.model) {
+                    jsonResponse.model = jsonResponse.model.replace('@', '-');
+                }
+                return jsonResponse;
+            } catch (err) {
+                console.error("Error parsing response:", err.message);
+                return json({ error: { message: 'Error parsing response', type: 'server_error', code: 'parse_error' } }, { status: 500 });
+            }
+        }
     } catch (err) {
-        console.error('Error in handleCompletion:', err.message);
-        return error(500, err.message);
+        console.error("Error in handleCompletion:", err.message);
+        return json({ error: { message: err.message, type: 'server_error', code: 'internal_error' } }, { status: 500 });
     }
 }
 
-async function GrpcToPieces(model, message, rules, stream, temperature, top_p) {
+// gRPC请求处理函数
+async function GrpcToPieces(models, message, rules, stream, temperature, top_p) {
     const credentials = grpc.credentials.createSsl();
     let client, request;
 
     try {
-        if (model.includes('gpt')) {
+        if (models.includes('gpt')) {
             const packageDefinition = new GRPCHandler(config.GPT_PROTO).packageDefinition;
-            request = {
-                models: model,
-                messages: [
-                    { role: 0, message: rules },
-                    { role: 1, message: message },
-                ],
-                temperature: temperature || 0.1,
-                top_p: top_p ?? 1,
-            };
+            request = { models, messages: [{ role: 0, message: rules }, { role: 1, message }], temperature: temperature || 0.1, top_p: top_p ?? 1 };
             const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.gpt;
             client = new GRPCobjects.GPTInferenceService(config.GPT_GRPC, credentials);
         } else {
             const packageDefinition = new GRPCHandler(config.COMMON_PROTO).packageDefinition;
-            request = {
-                models: model,
-                args: {
-                    messages: {
-                        unknown: 1,
-                        message,
-                    },
-                    rules,
-                },
-            };
+            request = { models, args: { messages: { unknown: 1, message }, rules } };
             const GRPCobjects = grpc.loadPackageDefinition(packageDefinition).runtime.aot.machine_learning.parents.vertex;
             client = new GRPCobjects.VertexInferenceService(config.COMMON_GRPC, credentials);
         }
-
-        // Debugging information for request
-        console.log('Request:', request);
-
-        // 在请求中保持原始模型名称，并在响应中进行转换
-        return await ConvertOpenai(client, request, model, stream);
+        return await ConvertOpenai(client, request, models, stream);
     } catch (err) {
-        console.error('Error in GrpcToPieces:', err.message);
+        console.error("Error in GrpcToPieces:", err.message);
         throw new Error(`GrpcToPieces failed: ${err.message}`);
     }
 }
 
-// 定义 messagesProcess 函数，解析传入的消息并返回规则和内容
+// 消息处理函数
 async function messagesProcess(messages) {
     let rules = '';
     let message = '';
-
     for (const msg of messages) {
         const role = msg.role;
-        const contentStr = Array.isArray(msg.content)
-            ? msg.content.filter((item) => item.text).map((item) => item.text).join('') || ''
-            : msg.content;
-        if (role === 'system') {
-            rules += `system:${contentStr};\r\n`;
-        } else if (['user', 'assistant'].includes(role)) {
-            message += `${role}:${contentStr};\r\n`;
-        }
+        const contentStr = Array.isArray(msg.content) ? msg.content.filter((item) => item.text).map((item) => item.text).join('') || '' : msg.content;
+        if (role === 'system') rules += `system:${contentStr};\r\n`;
+        else if (['user', 'assistant'].includes(role)) message += `${role}:${contentStr};\r\n`;
     }
+    console.log("Processed messages:", { rules, message });
     return { rules, message };
 }
 
+// gRPC转换函数
 async function ConvertOpenai(client, request, model, stream) {
-    const convertedModel = convertModel(model); // 将模型转换为符合规范的格式
-
     for (let i = 0; i < config.MAX_RETRY_COUNT; i++) {
         try {
             if (stream) {
+                console.log("开始流处理..."); // 调试输出开始流
                 const call = client.PredictWithStream(request);
                 const encoder = new TextEncoder();
                 const ReturnStream = new ReadableStream({
                     start(controller) {
                         call.on('data', (response) => {
                             const response_code = Number(response.response_code);
+                        //     console.log("接收到流数据块，响应代码：", response_code); // 调试数据块接收
                             if (response_code === 204) {
-                                controller.close();
-                                call.destroy();
+                                console.log("收到204响应代码，关闭流。");
+                                controller.close(); // 流正常结束
+                                call.destroy(); // 关闭流
                             } else if (response_code === 200) {
-                                const response_message = convertedModel.includes('gpt')
-                                    ? response.body.message_warpper.message.message
+                                const response_message = model.includes('gpt') 
+                                    ? response.body.message_warpper.message.message 
                                     : response.args.args.args.message;
-                                controller.enqueue(encoder.encode(`data: ${JSON.stringify(ChatCompletionStreamWithModel(response_message, convertedModel))}\n\n`));
+                                controller.enqueue(encoder.encode(`data: ${JSON.stringify(ChatCompletionStreamWithModel(response_message, model))}\n\n`));
                             } else {
+                                console.error("Stream error:", `Response code: ${response_code}`);
                                 controller.error(new Error(`Error: stream chunk is not successful with response code: ${response_code}`));
-                                controller.close();
                             }
+                        });
+
+                        call.on('end', () => {
+                            console.log("流处理结束."); // 调试输出流结束
+                            controller.enqueue(encoder.encode("data: [DONE]\n\n")); // 发送结束信号
+                            controller.close(); // 关闭流
+                        });
+
+                        call.on('error', (error) => {
+                            console.error("Stream error:", error.message);
+                            controller.error(new Error(`Stream error: ${error.message}`));
                         });
                     },
                 });
@@ -232,63 +240,49 @@ async function ConvertOpenai(client, request, model, stream) {
                 });
                 const response_code = Number(call.response_code);
                 if (response_code === 200) {
-                    const response_message = convertedModel.includes('gpt')
-                        ? call.body.message_warpper.message.message
+                    const response_message = model.includes('gpt') 
+                        ? call.body.message_warpper.message.message 
                         : call.args.args.args.message;
-                    return new Response(JSON.stringify(ChatCompletionWithModel(response_message, convertedModel)), { headers: { 'Content-Type': 'application/json' } });
+                    return new Response(JSON.stringify(ChatCompletionWithModel(response_message, model)), { headers: { 'Content-Type': 'application/json' } });
                 } else {
                     throw new Error(`Unexpected response code: ${response_code}`);
                 }
             }
         } catch (err) {
             console.error(`Error in ConvertOpenai attempt ${i + 1}:`, err.message);
-            await new Promise((resolve) => setTimeout(resolve, config.RETRY_DELAY));
+            await new Promise((resolve) => setTimeout(resolve, config.RETRY_DELAY)); // 等待重试
         }
     }
     return error(500, 'Maximum retry count reached');
 }
 
+
+    
+
+// 构建完成响应
 function ChatCompletionWithModel(message, model) {
     return {
         id: 'Chat-Nekohy',
         object: 'chat.completion',
         created: Date.now(),
         model,
-        usage: {
-            prompt_tokens: 0,
-            completion_tokens: 0,
-            total_tokens: 0,
-        },
-        choices: [
-            {
-                message: {
-                    content: message,
-                    role: 'assistant',
-                },
-                index: 0,
-            },
-        ],
+        usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+        choices: [{ message: { content: message, role: 'assistant' }, index: 0 }],
     };
 }
 
+// 流响应构建
 function ChatCompletionStreamWithModel(text, model) {
     return {
         id: 'chatcmpl-Nekohy',
         object: 'chat.completion.chunk',
         created: 0,
         model,
-        choices: [
-            {
-                index: 0,
-                delta: {
-                    content: text,
-                },
-                finish_reason: null,
-            },
-        ],
+        choices: [{ index: 0, delta: { content: text }, finish_reason: null }],
     };
 }
 
+// 启动HTTP服务器
 (async () => {
     if (typeof addEventListener === 'function') return;
     const ittyServer = createServerAdapter(router.fetch);
