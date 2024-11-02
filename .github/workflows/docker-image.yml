@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Extract version from package.json
+      id: extract_version  # 设置 ID 以便后续步骤引用
+      run: |
+        VERSION=$(jq -r '.version' package.json)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag chb2024/pieces-os:${{ steps.extract_version.outputs.version }} --tag chb2024/pieces-os:latest
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+    - name: Push the Docker image with version tag
+      run: docker push chb2024/pieces-os:${{ steps.extract_version.outputs.version }}
+    - name: Push the Docker image with latest tag
+      run: docker push chb2024/pieces-os:latest
