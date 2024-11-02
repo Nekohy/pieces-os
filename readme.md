@@ -14,10 +14,35 @@
 **请善待公共服务，尽量自己搭建**
 
 [https://pieces.nekomoon.cc](https://pieces.nekomoon.cc)
+[https://pieces.464888.xyz work反代koyeb](https://pieces.464888.xyz)
 # 一键部署
 [![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nekohy/pieces-os&project-name=Pieces-OS&repository-name=Pieces-OS)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=pieces-os&type=docker&image=chb2024%2Fpieces-os%3Alatest&regions=was&env%5B%5D=&ports=8787%3Bhttp%3B%2F)
 
 请注意下列环境变量！私人使用请添加API_KEY！
+
+cloudflare work反代koyeb
+```javascript
+export default {
+  async fetch(request, env) {
+    // 创建目标 URL 改成你自己的部署地址，不带协议头和/
+    const url = new URL(request.url);
+    url.hostname = 'abcdefg.koyeb.app';
+    
+    // 创建新的请求对象
+    const newRequest = new Request(url, {
+      method: request.method,
+      headers: request.headers,
+      body: request.method === 'POST' ? request.body : null,
+      redirect: 'follow'
+    });
+
+    // 转发请求并返回响应
+    return fetch(newRequest);
+  }
+}
+```
+
 # todo
 - [x] 流式实现
 - [x] Serverless部署
