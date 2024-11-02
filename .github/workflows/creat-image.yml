@@ -11,32 +11,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Extract version from package.json
-        id: extract_version
-        run: |
-          if [ ! -f package.json ]; then
-            echo "Error: package.json not found"
-            exit 1
-          fi
-          VERSION=$(jq -r '.version' package.json)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Failed to extract version"
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      # 添加 Node.js 设置
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
           cache: 'npm'
 
-      # 验证 npm 配置
-      - name: Verify npm configuration
+      - name: Install dependencies
         run: |
-          npm config list
-          npm cache verify
+          npm install
+          npm ci
+
+      - name: Extract version
+        id: extract_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -47,7 +37,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker images
+      - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
