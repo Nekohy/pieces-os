@@ -19,6 +19,11 @@
 # 一键部署
 [![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nekohy/pieces-os&project-name=Pieces-OS&repository-name=Pieces-OS)
 
+服务器部署命令：
+```
+bash <(curl -s https://raw.githubusercontent.com/shuwu-ui/pieces-os/refs/heads/main/install.sh)
+```
+
 [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=pieces-os&type=docker&image=chb2024%2Fpieces-os%3Alatest&regions=was&env%5B%5D=&ports=8787%3Bhttp%3B%2F)
 
 请注意下列环境变量！私人使用请添加API_KEY！
@@ -87,7 +92,7 @@ vercel.json Vercel部署配置文件
 - **codechat-bison**
 
 # 手动部署
-安装 package.json 中定义的依赖库后，执行 node index.js 启动程序
+安装 package.json 中定义的依赖库后，执行 `node index.js` 或者 `npm start`启动程序
 # 测试命令
 ```
 获取模型
