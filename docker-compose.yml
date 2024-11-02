@@ -1,7 +1,8 @@
 version: '3.8'
+
 services:
   pieces-os:
-    image: shiwu077/pieces-os:latest
+    image: chb2024/pieces-os:latest
     container_name: pieces-os
     ports:
       - "8787:8787"  # 左边端口可以修改（如：9000:8787），右边端口不要改
