@@ -11,15 +11,24 @@
 # 免责声明
 本项目仅供学习交流使用，不得用于商业用途，如有侵权请联系删除
 # DEMO站
-**请善待公共服务，尽量自己搭建**
+**请善待公共服务，尽量自己搭建(不要搞黄，demo会崩溃）**
 
 ~~[Vercel](https://pieces.nekomoon.cc)~~
 
 [Cloudflare worker反代koyeb](https://pieces.464888.xyz)
+
+[HuggingFace](https://chb2024-pieces-os.hf.space/hf)
+API_PREFIX环境变量为/hf
+
 # 一键部署
 [![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nekohy/pieces-os&project-name=Pieces-OS&repository-name=Pieces-OS)
 
 [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=pieces-os&type=docker&image=chb2024%2Fpieces-os%3Alatest&regions=was&env%5B%5D=&ports=8787%3Bhttp%3B%2F)
+
+[复制huggingface空间](https://huggingface.co/spaces/chb2024/pieces-os?duplicate=true&visibility=public)
+注意事项
+抱脸会阻止/v1的请求，设置API_PREFIX为/hf或任意/+其他字母或数字组合即可，使用时在原先的请求点上添加即可，例如https://xxx.hf.space/v1/models变成https://xxx.hf.space/hf/v1/models
+如果不能复制空间，就把原空间文件全部下载，新建一个public空间，删除之前的并重新上传并重启即可
 
 请注意下列环境变量！私人使用请添加API_KEY！
 
