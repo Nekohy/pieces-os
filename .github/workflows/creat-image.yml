@@ -11,11 +11,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        architecture: [linux/amd64, linux/arm64]
-
     steps:
+      - name: Check VISION secret
+        run: |
+          if [ -z "${{ secrets.VISION }}" ]; then
+            echo "Error: VISION secret is not set"
+            exit 1
+          fi
+
       - name: Check out the repository
         uses: actions/checkout@v2
 
@@ -31,25 +34,23 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        if: env.VISION != '' && matrix.architecture == 'linux/amd64'
+      - name: Build and push Docker image (AMD64)
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: |
-            chb2024/pieces-os:${{ env.VISION }}
+            chb2024/pieces-os:${{ secrets.VISION }}
             chb2024/pieces-os:latest
           platforms: linux/amd64
 
-      - name: Build and push ARM Docker image
-        if: env.VISION != '' && matrix.architecture == 'linux/arm64'
+      - name: Build and push Docker image (ARM64)
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: |
-            chb2024/pieces-os-arm:${{ env.VISION }}
+            chb2024/pieces-os-arm:${{ secrets.VISION }}
             chb2024/pieces-os-arm:latest
           platforms: linux/arm64
 
