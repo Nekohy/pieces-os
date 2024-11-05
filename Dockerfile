@@ -1,5 +1,5 @@
 # 使用 Node.js 20 作为基础镜像
-FROM node:20
+FROM node:20-alpine
 
 # 设置工作目录
 WORKDIR /usr/src/app
