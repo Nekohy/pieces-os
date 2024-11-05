@@ -72,6 +72,7 @@ protos
 cloud_model.json 云端模型的配置文件，请提取unique中的模型使用
 package.json 项目依赖
 vercel.json Vercel部署配置文件
+healthCheck.js 用于自动重启崩溃的主程序
 ```
 # 测试可用模型
 
@@ -98,7 +99,7 @@ vercel.json Vercel部署配置文件
 - **codechat-bison**
 
 # 手动部署
-安装 package.json 中定义的依赖库后，执行 node index.js 启动程序
+安装 package.json 中定义的依赖库后，执行 node index.js 启动程序。若需要自动重启功能，请额外执行 node healthCheck.js
 # 测试命令
 ```
 获取模型
@@ -153,7 +154,18 @@ curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
 - **默认值**: 所有模型
 - **获取方式**: `process.env.SUPPORTED_MODELS
 
+## `CHECK_INTERVAL`
+- **描述**: 健康(index.js状态)检查的时间间隔，以秒为单位。
+- **默认值**: `60` 秒
+- **获取方式**: `process.env.CHECK_INTERVAL`
+
 ## Docker 部署说明
+
+x86架构请拉取`chb2024/pieces-os:latest`，arm架构请拉取`chb2024/pieces-os-arm:latest`
+
+docker对于2.0.0以上的版本支持自动重启
+
+以下为x86架构部署示例，arm用户更换镜像即可
 
 ### 使用 Docker Compose（推荐）
 
