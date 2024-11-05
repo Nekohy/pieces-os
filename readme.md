@@ -160,6 +160,7 @@ curl --request POST 'http://127.0.0.1:8787/v1/chat/completions' \
 - **获取方式**: `process.env.CHECK_INTERVAL`
 
 ## Docker 部署说明
+非本人维护，docker_test分支含最新更改，未经验证
 
 x86架构请拉取`chb2024/pieces-os:latest`，arm架构请拉取`chb2024/pieces-os-arm:latest`
 
