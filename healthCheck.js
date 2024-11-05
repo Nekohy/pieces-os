@@ -26,7 +26,7 @@ function checkPort() {
 function restartApp() {
   console.log(`[${new Date().toISOString()}] 正在重启应用...`);
   
-  exec('node index.js', () => {
+  exec('node api/index.js', () => {
     console.log(`[${new Date().toISOString()}] 已尝试重启，继续执行健康检查...`);
   });
 }
